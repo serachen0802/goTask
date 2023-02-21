@@ -69,16 +69,15 @@ func UpdateTask(c *gin.Context) {
 	if err != nil {
 		return
 	}
-	// 看這個ID存在嗎
-	name := c.PostForm("name")
-	status, err := strconv.ParseBool(c.PostForm("status"))
-	if err != nil {
-		return
-	}
 
 	_, ok := Alldata[id]
 	if !ok {
 		c.JSON(http.StatusOK, "ID不存在")
+		return
+	}
+	name := c.PostForm("name")
+	status, err := strconv.ParseBool(c.PostForm("status"))
+	if err != nil {
 		return
 	}
 
@@ -87,22 +86,19 @@ func UpdateTask(c *gin.Context) {
 		Name:   name,
 		Status: status,
 	}
+	c.JSON(http.StatusOK, Alldata[id])
+
 	// 	for i := 0; i < len(Alldata); i++ {
 	// 		if Alldata[i].ID == id {
 	// 			Alldata[i].Name = name
 	// 			Alldata[i].Status = status
 	// 		}
 	// 	}
-	c.JSON(http.StatusOK, Alldata[id])
 }
 
 //刪除Task
 func Delete(c *gin.Context) {
 	id := c.Param("id")
-
-	// 	c.JSON(http.StatusOK, gin.H{
-	// 		"id": id,
-	// 	})
 	IdtoInt, err := strconv.Atoi(id)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
